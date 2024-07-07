@@ -5,6 +5,7 @@ import { checkValideData } from "../Utils/Validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../Utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -19,16 +20,16 @@ const Login = () => {
     setIsSignInForm(!isSignInForm);
   };
 
+  const fullName = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const fullName = useRef(null);
 
   const handleButtonClick = () => {
     //Validation
     const message = checkValideData(
+      //fullName.current.value,
       email.current.value,
       password.current.value
-      //fullName.current.value
     );
 
     setErrorMessage(message);
@@ -42,8 +43,20 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: "Debashis",
+            photoURL: "https://avatars.githubusercontent.com/u/59418234?v=4",
+          })
+            .then(() => {
+              // Profile updated!
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              setErrorMessage(error.message);
+            });
           console.log(user);
-          navigate("/browse");
+          //navigate("/browse");
           // ...
         })
         .catch((error) => {

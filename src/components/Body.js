@@ -23,7 +23,6 @@ const Body = () => {
   useState(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("user: " + user);
         const { uid, email, displayName } = user;
         dispatch(addUser(uid, email, displayName));
       } else {
